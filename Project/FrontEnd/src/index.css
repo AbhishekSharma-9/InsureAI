@@ -1,0 +1,11 @@
+/* This is the main CSS file. Delete everything in your existing one and replace it with this. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add any global base styles here */
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

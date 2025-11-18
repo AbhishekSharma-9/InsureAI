@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  // InsurAiLogo, // No longer needed from Icons.jsx
+  // InsurAiLogo, // No longer needed
   DocumentIcon,
   UserIcon,
   ChartIcon,
 } from '../components/Icons'; // Import icons
 
 // --- IMPORT YOUR IMAGE ---
-import InsureAiPngLogo from '../assets/InsureAi.png'; // Adjust path if needed
+import InsureAiPngLogo from '../assets/InsureAi.png'; // Correct path from pages folder
 
 // Note: We receive 'onNavigate' as a prop from App.jsx
 const HomePage = ({ onNavigate }) => {

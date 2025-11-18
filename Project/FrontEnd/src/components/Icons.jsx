@@ -1,25 +1,7 @@
 import React from 'react';
 
 // This file holds all your icons.
-// We export each one so any component can import them.
-
-export const InsurAiLogo = () => (
-  <svg
-    className="h-8 w-auto"
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M20 0C9 0 0 9 0 20C0 31 9 40 20 40C31 40 40 31 40 20C40 9 31 0 20 0ZM20 36C11.2 36 4 28.8 4 20C4 11.2 11.2 4 20 4C28.8 4 36 11.2 36 20C36 28.8 28.8 36 20 36Z"
-      fill="currentColor"
-    />
-    <path
-      d="M20 10C16.7 10 14 12.7 14 16C14 19.3 16.7 22 20 22C23.3 22 26 19.3 26 16C26 12.7 23.3 10 20 10ZM20 18C18.9 18 18 17.1 18 16C18 14.9 18.9 14 20 14C21.1 14 22 14.9 22 16C22 17.1 21.1 18 20 18Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+// We are REMOVING InsurAiLogo since we'll import the PNG directly.
 
 export const UserIcon = ({ className = 'w-6 h-6' }) => (
   <svg
@@ -136,6 +118,24 @@ export const LogoutIcon = ({ className = 'w-6 h-6' }) => (
       strokeLinejoin="round"
       strokeWidth={2}
       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+    />
+  </svg>
+);
+
+// --- ADD THIS NEW ICON FOR MILESTONE 2 ---
+export const CalendarIcon = ({ className = 'w-6 h-6' }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
     />
   </svg>
 );

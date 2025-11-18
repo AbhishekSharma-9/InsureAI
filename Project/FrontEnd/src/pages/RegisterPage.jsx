@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios for API calls
-import { UserIcon, LockIcon, EmailIcon } from '../components/Icons'; // Import icons
-import InsureAiPngLogo from '../assets/InsureAi.png'; // Import PNG logo
+import {
+  // InsurAiLogo, // Remove old
+  UserIcon,
+  LockIcon,
+  EmailIcon,
+} from '../components/Icons'; // Import icons
+
+// --- IMPORT YOUR IMAGE ---
+import InsureAiPngLogo from '../assets/InsureAi.png'; // Correct path from pages folder
 
 // Receives 'onNavigate' from App.jsx
 const RegisterPage = ({ onNavigate }) => {
@@ -48,7 +55,11 @@ const RegisterPage = ({ onNavigate }) => {
     } catch (err) {
       // Handle errors
       if (err.response && err.response.data) {
-        setError(err.response.data); // Show error from server (e.g., "Username taken")
+        // Use the improved error message from backend
+        const errorMessage = typeof err.response.data === 'string' 
+          ? err.response.data 
+          : 'Registration failed. Please check your input.';
+        setError(errorMessage); 
       } else {
         setError('Registration failed. Please try again later.');
       }
@@ -61,11 +72,12 @@ const RegisterPage = ({ onNavigate }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
-        <div className="flex justify-center text-blue-600">
+        <div className="flex justify-center">
+          {/* --- USE IMG TAG --- */}
           <img
             src={InsureAiPngLogo}
             alt="InsurAI Logo"
-            className="h-10 w-auto"
+            className="h-10 w-auto" // Adjust size as needed
           />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-900">

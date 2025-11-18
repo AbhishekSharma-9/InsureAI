@@ -7,28 +7,32 @@ import RegisterPage from './pages/RegisterPage';
 import UserDashboard from './pages/UserDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
-/**
- * This is the main "brain" of your application.
- * It controls which page is currently visible and holds the
- * authentication state (userRole).
- */
+// We no longer need to import the sub-pages here
+// The Dashboard components will handle that
+
 export default function App() {
-  // 'home', 'login', 'register', 'userDashboard', 'adminDashboard'
   const [currentPage, setCurrentPage] = useState('home');
-  
-  // 'null', 'user', 'admin'
-  // We can try to get this from localStorage in case the user
-  // refreshed the page, but for now we'll start logged out.
   const [userRole, setUserRole] = useState(null); 
   const isLoggedIn = userRole !== null;
   
-  // --- Navigation and Auth Functions ---
-  // We pass these functions down to the page components as "props"
+  // --- Check for token on app load ---
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    const role = localStorage.getItem('userRole'); // We will store the role on login
+    
+    if (token && role) {
+      // In a real app, you'd validate the token with a /api/auth/validate endpoint
+      // For now, we trust the stored token and role
+      setUserRole(role);
+      if (role === 'admin') {
+        setCurrentPage('adminDashboard');
+      } else {
+        setCurrentPage('userDashboard');
+      }
+    }
+  }, []); // Empty array means this runs once on app load
 
-  /**
-   * Navigates to a different page.
-   * @param {string} page - The page to navigate to.
-   */
+
   const navigate = (page) => {
     setCurrentPage(page);
   };
@@ -38,11 +42,12 @@ export default function App() {
    * @param {string} role - The role of the user ('USER' or 'ADMIN').
    */
   const handleLogin = (role) => {
-    // The role from your Spring Boot API might be "USER" or "ADMIN"
     const normalizedRole = role.toLowerCase();
     setUserRole(normalizedRole);
     
-    // Navigate to the correct dashboard based on role
+    // --- Store role in localStorage for persistent login ---
+    localStorage.setItem('userRole', normalizedRole); 
+    
     if (normalizedRole === 'admin') {
       setCurrentPage('adminDashboard');
     } else {
@@ -56,12 +61,12 @@ export default function App() {
   const handleLogout = () => {
     setUserRole(null);
     setCurrentPage('home');
-    // Clear the token from localStorage
+    // Clear the token AND role
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userRole');
   };
 
   // --- Render Logic ---
-  // This logic decides which page component to show.
 
   // If the user is NOT logged in
   if (!isLoggedIn) {
@@ -79,25 +84,17 @@ export default function App() {
   // If the user IS logged in
   switch (userRole) {
     case 'user':
-      // Render user-specific pages
-      // Add more pages here (e.g., 'myPolicies', 'myClaims')
-      switch (currentPage) {
-        case 'userDashboard':
-        default:
-          return <UserDashboard onLogout={handleLogout} />;
-      }
+      // The UserDashboard now handles its own internal navigation
+      return <UserDashboard onLogout={handleLogout} />;
 
     case 'admin':
-      // Render admin-specific pages
-      // Add more pages here (e.g., 'managePolicies', 'manageClaims')
-      switch (currentPage) {
-        case 'adminDashboard':
-        default:
-          return <AdminDashboard onLogout={handleLogout} />;
-      }
+      // The AdminDashboard now handles its own internal navigation
+      return <AdminDashboard onLogout={handleLogout} />;
       
     default:
       // This is a fallback, should not be reached
+      // If role is corrupted, log out
+      handleLogout();
       return <HomePage onNavigate={navigate} />;
   }
 }

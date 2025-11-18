@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Import axios for API calls
-import { UserIcon, LockIcon } from '../components/Icons'; // Import icons
-import InsureAiPngLogo from '../assets/InsureAi.png'; // Import PNG logo
+// import { InsurAiLogo, UserIcon, LockIcon } from '../components/Icons'; // Remove old
+import { UserIcon, LockIcon } from '../components/Icons'; // Import only needed icons
+
+// --- IMPORT YOUR IMAGE ---
+import InsureAiPngLogo from '../assets/InsureAi.png'; // Correct path from pages folder
 
 // Receives 'onLogin' and 'onNavigate' from App.jsx
 const LoginPage = ({ onLogin, onNavigate }) => {
@@ -36,10 +39,7 @@ const LoginPage = ({ onLogin, onNavigate }) => {
       onLogin(role); // This will trigger navigation to the dashboard
     } catch (err) {
       // Handle errors
-      if (
-        err.response &&
-        (err.response.status === 401 || err.response.status === 403)
-      ) {
+      if (err.response && (err.response.status === 401 || err.response.status === 403)) {
         setError('Invalid username or password.');
       } else {
         setError('Login failed. Please try again later.');
@@ -53,11 +53,12 @@ const LoginPage = ({ onLogin, onNavigate }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
-        <div className="flex justify-center text-blue-600">
+        <div className="flex justify-center">
+          {/* --- USE IMG TAG --- */}
           <img
             src={InsureAiPngLogo}
             alt="InsurAI Logo"
-            className="h-10 w-auto"
+            className="h-10 w-auto" // Adjust size as needed
           />
         </div>
         <h2 className="text-2xl font-bold text-center text-gray-900">

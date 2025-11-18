@@ -1,6 +1,5 @@
 package com.insurai.backend.controller;
 
-// --- ALL THE MISSING IMPORTS ARE HERE ---
 import com.insurai.backend.dto.AuthResponse;
 import com.insurai.backend.dto.LoginRequest;
 import com.insurai.backend.dto.RegisterRequest;
@@ -15,11 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-// --- END OF IMPORTS ---
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173") // Allow React app
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
@@ -31,7 +29,7 @@ public class AuthController {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
-    @PostMapping("/login") // --- VERIFICATION LOGIC ---
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -41,17 +39,32 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = userRepository.findByUsername(loginRequest.getUsername()).get();
-        String role = user.getRole().replace("ROLE_", ""); // "USER" or "ADMIN"
+        String role = user.getRole().replace("ROLE_", "");
         String jwt = tokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new AuthResponse(jwt, role));
     }
 
-    @PostMapping("/register") // --- SAVE LOGIC ---
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+
+        // --- THIS IS THE NEW, SMARTER CHECK ---
         if (userRepository.findByUsername(registerRequest.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+            // We return a user-friendly error
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Username is already taken!");
         }
 
+        // You can also add a check for the email
+        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Email is already in use!");
+        }
+        // --- END OF NEW CHECKS ---
+
+
+        // If checks pass, create new user's account
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
